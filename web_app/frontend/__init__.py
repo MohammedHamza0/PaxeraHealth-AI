@@ -1,0 +1,3 @@
+"""
+PaxeraHealth Segmentation Frontend Assets
+"""

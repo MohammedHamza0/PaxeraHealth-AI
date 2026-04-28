@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PaxeraHealth AI Segmentation</title>
+    <!-- Lato Font from Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Lato', 'sans-serif'],
+                    },
+                    colors: {
+                        paxera: {
+                            orange: '#f6921e',
+                            hover: '#e58015',
+                            dark: '#454545',
+                            text: '#212529',
+                            bg: '#f8f9fa'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="bg-gray-50 text-paxera-text min-h-screen font-sans antialiased overflow-x-hidden">
+    <!-- Header -->
+    <header class="bg-white border-b border-gray-200 p-4 sticky top-0 z-50 shadow-sm">
+        <div class="container mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div
+                    class="w-10 h-10 bg-paxera-orange rounded-lg flex items-center justify-center text-xl font-bold text-white shadow-sm">
+                    PH
+                </div>
+                <h1 class="text-2xl font-bold text-paxera-dark">
+                    PaxeraHealth AI
+                </h1>
+            </div>
+            <nav class="hidden md:flex gap-6 text-sm font-bold text-paxera-dark">
+                <a href="#" class="hover:text-paxera-orange transition-colors">Segmentation</a>
+                <a href="#" class="hover:text-paxera-orange transition-colors">Documentation</a>
+                <a href="#" class="hover:text-paxera-orange transition-colors">Settings</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-12 max-w-6xl">
+        <div class="text-center mb-12 animate-fade-in">
+            <h2 class="text-4xl font-black mb-4 tracking-tight text-paxera-dark">EndoVis Medical Image <span
+                    class="text-paxera-orange">Segmentation</span></h2>
+            <p class="text-gray-600 max-w-2xl mx-auto text-lg">
+                Upload medical images and choose between binary or multi-class segmentation models powered by our
+                fine-tuned U-Net architecture.
+            </p>
+        </div>
+
+        <div class="grid lg:grid-cols-3 gap-8">
+            <!-- Controls Panel -->
+            <div class="lg:col-span-1 space-y-6">
+                <!-- Upload Card -->
+                <div class="bg-white rounded-xl p-6 border border-gray-200 shadow-sm relative overflow-hidden group">
+                    <h3 class="text-xl font-bold text-paxera-dark mb-4 flex items-center gap-2">
+                        <svg class="w-5 h-5 text-paxera-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
+                        </svg>
+                        1. Upload Image
+                    </h3>
+
+                    <label for="file-upload"
+                        class="border-2 border-dashed border-gray-300 bg-gray-50 rounded-xl p-8 text-center hover:border-paxera-orange transition-colors cursor-pointer block"
+                        id="drop-zone">
+                        <input type="file" id="file-upload" class="sr-only" accept="image/*"
+                            onchange="handleFileSelect(event)">
+                        <div class="flex flex-col items-center gap-3">
+                            <svg class="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
+                                </path>
+                            </svg>
+                            <div>
+                                <span class="text-paxera-orange font-bold hover:underline">Click to upload</span> <span
+                                    class="text-gray-600">or drag and drop</span>
+                            </div>
+                            <p class="text-xs text-gray-500">PNG, JPG up to 10MB</p>
+                        </div>
+                    </label>
+
+                    <div class="mt-4 text-center">
+                        <p class="text-sm text-gray-500 mb-2 font-bold">Or try with a sample:</p>
+                        <button onclick="loadTestImage()"
+                            class="px-4 py-2 bg-paxera-dark hover:bg-black text-white rounded-lg text-sm font-bold transition-colors w-full flex items-center justify-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
+                                </path>
+                            </svg>
+                            Load Test Image
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Model Selection Card -->
+                <div class="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
+                    <h3 class="text-xl font-bold text-paxera-dark mb-4 flex items-center gap-2">
+                        <svg class="w-5 h-5 text-paxera-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z">
+                            </path>
+                        </svg>
+                        2. Select Model
+                    </h3>
+                    <div class="space-y-3">
+                        <label
+                            class="flex items-center p-4 border border-gray-200 bg-gray-50 rounded-xl cursor-pointer hover:border-paxera-orange transition-colors model-option">
+                            <input type="radio" name="model_type" value="binary"
+                                class="text-paxera-orange focus:ring-paxera-orange w-4 h-4" checked>
+                            <div class="ml-3">
+                                <span class="block text-sm font-bold text-paxera-dark">Binary Segmentation</span>
+                                <span class="block text-xs text-gray-500">Identifies instruments vs background</span>
+                            </div>
+                        </label>
+                        <label
+                            class="flex items-center p-4 border border-gray-200 bg-gray-50 rounded-xl cursor-pointer hover:border-paxera-orange transition-colors model-option">
+                            <input type="radio" name="model_type" value="multi"
+                                class="text-paxera-orange focus:ring-paxera-orange w-4 h-4">
+                            <div class="ml-3">
+                                <span class="block text-sm font-bold text-paxera-dark">Multi-class Segmentation</span>
+                                <span class="block text-xs text-gray-500">Differentiates tool parts/types</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Action Button -->
+                <button id="predict-btn" onclick="runPrediction()"
+                    class="w-full py-4 rounded-xl bg-paxera-orange text-white font-bold text-lg shadow-md hover:bg-paxera-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    disabled>
+                    Run Segmentation Pipeline
+                </button>
+            </div>
+
+            <!-- Preview Panel -->
+            <div class="lg:col-span-2">
+                <div class="bg-white rounded-xl p-6 border border-gray-200 shadow-sm h-full flex flex-col">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-xl font-bold text-paxera-dark flex items-center gap-2">
+                            <svg class="w-5 h-5 text-paxera-orange" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z">
+                                </path>
+                            </svg>
+                            Visualization
+                        </h3>
+                        <div class="flex gap-2">
+                            <button
+                                class="px-3 py-1 text-xs font-bold text-paxera-dark bg-gray-100 border border-gray-300 rounded-md hover:bg-gray-200 transition-colors"
+                                onclick="toggleView('split')">Split</button>
+                            <button
+                                class="px-3 py-1 text-xs font-bold text-paxera-dark bg-gray-100 border border-gray-300 rounded-md hover:bg-gray-200 transition-colors"
+                                onclick="toggleView('overlay')">Overlay</button>
+                        </div>
+                    </div>
+
+                    <div
+                        class="flex-1 bg-gray-100 rounded-xl border border-gray-200 flex items-center justify-center relative overflow-hidden min-h-[400px]">
+
+                        <!-- Initial State -->
+                        <div id="empty-state" class="text-center text-gray-500 p-8">
+                            <svg class="w-16 h-16 mx-auto mb-4 opacity-50" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
+                                </path>
+                            </svg>
+                            <p class="font-medium">Upload an image to see the visualization here.</p>
+                        </div>
+
+                        <!-- Loading State -->
+                        <div id="loading-state"
+                            class="absolute inset-0 bg-white/80 backdrop-blur-sm hidden items-center justify-center z-10 flex-col gap-4">
+                            <div
+                                class="w-12 h-12 border-4 border-paxera-orange border-t-transparent rounded-full animate-spin">
+                            </div>
+                            <p class="text-paxera-orange font-bold animate-pulse">Running model inference...</p>
+                        </div>
+
+                        <!-- Results View -->
+                        <div id="results-view" class="hidden w-full h-full p-4">
+                            <div id="split-view" class="grid grid-cols-2 gap-4 h-full">
+                                <div class="flex flex-col h-full">
+                                    <span
+                                        class="text-xs text-gray-600 mb-2 font-bold uppercase tracking-wider">Original</span>
+                                    <div
+                                        class="relative flex-1 bg-white rounded-lg overflow-hidden border border-gray-300 shadow-inner">
+                                        <img id="original-img" class="absolute inset-0 w-full h-full object-contain"
+                                            src="" alt="Original">
+                                    </div>
+                                </div>
+                                <div class="flex flex-col h-full">
+                                    <span
+                                        class="text-xs text-gray-600 mb-2 font-bold uppercase tracking-wider">Segmentation
+                                        Mask</span>
+                                    <div
+                                        class="relative flex-1 bg-white rounded-lg overflow-hidden border border-gray-300 shadow-inner checkerboard">
+                                        <img id="mask-img" class="absolute inset-0 w-full h-full object-contain" src=""
+                                            alt="Mask">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="overlay-view" class="hidden h-full flex flex-col">
+                                <span
+                                    class="text-xs text-gray-600 mb-2 font-bold uppercase tracking-wider text-center">Overlay</span>
+                                <div
+                                    class="relative flex-1 bg-white rounded-lg overflow-hidden border border-gray-300 shadow-inner flex items-center justify-center">
+                                    <div class="relative w-full h-full">
+                                        <img id="overlay-original" class="absolute inset-0 w-full h-full object-contain"
+                                            src="" alt="Original">
+                                        <img id="overlay-mask"
+                                            class="absolute inset-0 w-full h-full object-contain opacity-60 blend-screen"
+                                            src="" alt="Mask">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
