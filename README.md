@@ -20,7 +20,7 @@ The application is built on a robust architecture featuring a decoupled frontend
 ## Project Structure
 ```
 .
-├── .env                        # Environment variables (local, do not commit)
+├── .env                        # Environment variables (local)
 ├── .env.example                # Environment template
 ├── .gitignore                  # Git ignore rules
 ├── LICENSE                     # Project license
